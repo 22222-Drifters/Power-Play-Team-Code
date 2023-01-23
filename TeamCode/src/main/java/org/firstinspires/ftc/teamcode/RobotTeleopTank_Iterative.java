@@ -68,8 +68,8 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public static final double MID_SERVO   =  0.5 ;
     public static final double CLAW_SPEED  = 0.02 ;        // sets rate to move servo
 
-   */ public static final double SLIDER_UP_POWER    =  0.50 ;   // Run arm motor up at 50% power
-    public static final double SLIDER_DOWN_POWER  = -0.25 ;   // Run arm motor down at -25% power
+   */ public static final double SLIDER_UP_POWER    =  0.4 ;   // Run arm motor up at 50% power
+    public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run arm motor down at -25% power
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -135,19 +135,26 @@ public class RobotTeleopTank_Iterative extends OpMode{
         xSpeed = -gamepad1.left_stick_y;
         ySpeed = +gamepad1.left_stick_x;
         thetaRotation = +gamepad1.right_stick_x;
-        upSlider = gamepad2.left_bumper;
-        downSlider = gamepad2.right_bumper;
+        upSlider = gamepad2.y;
+        downSlider = gamepad2.a;
 
         backLeft.setPower(xSpeed - ySpeed + thetaRotation);
         backRight.setPower(xSpeed + ySpeed - thetaRotation);
         frontLeft.setPower(xSpeed + ySpeed + thetaRotation);
         frontRight.setPower(xSpeed - ySpeed - thetaRotation);
 
+
         if (upSlider)
             slider.setPower(SLIDER_UP_POWER);
-        if (downSlider)
-            slider.setPower(SLIDER_DOWN_POWER);
-    }
+        else {
+            if (downSlider)
+                slider.setPower(SLIDER_DOWN_POWER);
+            else {
+                slider.setPower(0);
+            }
+        }
+        }
+
     /* // Use gamepad left & right Bumpers to open and close the claw
      if (gamepad1.right_bumper)
          clawOffset += CLAW_SPEED;
