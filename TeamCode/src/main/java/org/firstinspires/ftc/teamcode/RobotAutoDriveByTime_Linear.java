@@ -55,6 +55,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
+<<<<<<< Updated upstream
 
 public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 
@@ -65,6 +66,16 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     private DcMotor  backRight  = null;
 
     private ElapsedTime runtime = new ElapsedTime();
+=======
+@Disabled
+public class RobotAutoDriveByTime_Linear extends LinearOpMode {
+
+    /* Declare OpMode members. */
+    private DcMotor         leftDrive   = null;
+    private DcMotor         rightDrive  = null;
+
+    private ElapsedTime     runtime = new ElapsedTime();
+>>>>>>> Stashed changes
 
 
     static final double     FORWARD_SPEED = 0.6;
@@ -73,18 +84,29 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+<<<<<<< Updated upstream
         frontLeft  = hardwareMap.get(DcMotor.class, "front_left");
         frontRight = hardwareMap.get(DcMotor.class, "front_right");
         backLeft   = hardwareMap.get(DcMotor.class, "back_left");
         backRight   = hardwareMap.get(DcMotor.class, "back_right");
+=======
+        // Initialize the drive system variables.
+        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+>>>>>>> Stashed changes
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+<<<<<<< Updated upstream
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
+=======
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+>>>>>>> Stashed changes
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -96,33 +118,60 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
         // Step 1:  Drive forward for 3 seconds
+<<<<<<< Updated upstream
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(FORWARD_SPEED);
         backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {
+=======
+        leftDrive.setPower(FORWARD_SPEED);
+        rightDrive.setPower(FORWARD_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+>>>>>>> Stashed changes
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
         // Step 2:  Spin right for 1.3 seconds
+<<<<<<< Updated upstream
         frontLeft.setPower(TURN_SPEED);
         frontRight.setPower(-TURN_SPEED);
         backLeft.setPower(TURN_SPEED);
         backRight.setPower(-TURN_SPEED);
+=======
+        leftDrive.setPower(TURN_SPEED);
+        rightDrive.setPower(-TURN_SPEED);
+>>>>>>> Stashed changes
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.3)) {
             telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
+<<<<<<< Updated upstream
 
         // Step 4:  Stop
         frontRight.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
+=======
+        // Step 3:  Drive Backward for 1 Second
+        leftDrive.setPower(-FORWARD_SPEED);
+        rightDrive.setPower(-FORWARD_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+
+        // Step 4:  Stop
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+>>>>>>> Stashed changes
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
