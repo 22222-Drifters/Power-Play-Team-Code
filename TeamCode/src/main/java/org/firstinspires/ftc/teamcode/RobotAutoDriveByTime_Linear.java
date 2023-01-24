@@ -146,7 +146,6 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         // Step 4:  Stop
         leftDrive.setPower(0);
         rightDrive.setPower(0);
->>>>>>> Stashed changes
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
