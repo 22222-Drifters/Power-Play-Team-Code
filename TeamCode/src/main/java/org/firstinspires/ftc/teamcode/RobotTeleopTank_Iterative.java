@@ -36,20 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This particular OpMode executes a Tank Drive control TeleOp a direct drive robot
- * The code is structured as an Iterative OpMode
- *
- * In this mode, the left and right joysticks control the left and right motors respectively.
- * Pushing a joystick forward will make the attached motor drive forward.
- * It raises and lowers the claw using the Gamepad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
-@TeleOp(name="Robot: Teleop Tank", group="Robot")
+@TeleOp(name="Basic Teleop", group="Robot")
 
 public class RobotTeleopTank_Iterative extends OpMode{
 
@@ -59,28 +46,24 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public DcMotor  backLeft   = null;
     public DcMotor  backRight  = null;
     public DcMotor  slider  = null;
-    /*public DcMotor  leftArm     = null;
-    public Servo    leftClaw    = null;
-    public Servo    rightClaw   = null;
+    public Servo    Claw    = null;
 
     double clawOffset = 0;
 
-    public static final double MID_SERVO   =  0.5 ;
-    public static final double CLAW_SPEED  = 0.02 ;        // sets rate to move servo
+    public static final double OPEN_CLAW   =  0.5 ;
+    public static final double CLOSED_CLAW  = 0.8 ;        // sets rate to move servo
 
-   */ public static final double SLIDER_UP_POWER    =  0.4 ;   // Run arm motor up at 50% power
-    public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run arm motor down at -25% power
+    public static final double SLIDER_UP_POWER    =  0.4 ;   // Run slider motor up at 40% power
+    public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run slider motor down at -20% power
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+    //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
         // Define and Initialize Motors
         frontLeft  = hardwareMap.get(DcMotor.class, "front_left");
         frontRight = hardwareMap.get(DcMotor.class, "front_right");
         backLeft   = hardwareMap.get(DcMotor.class, "back_left");
-        backRight   = hardwareMap.get(DcMotor.class, "back_right");
+        backRight  = hardwareMap.get(DcMotor.class, "back_right");
         slider  = hardwareMap.get(DcMotor.class, "slider");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -90,51 +73,46 @@ public class RobotTeleopTank_Iterative extends OpMode{
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        slider .setDirection(DcMotor.Direction.FORWARD);
+        slider.setDirection(DcMotor.Direction.FORWARD);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-       /* leftClaw  = hardwareMap.get(Servo.class, "left_hand");
-        rightClaw = hardwareMap.get(Servo.class, "right_hand");
-        leftClaw.setPosition(MID_SERVO);
-        rightClaw.setPosition(MID_SERVO);
-*/
+        Claw  = hardwareMap.get(Servo.class, "claw");
+        Claw.setPosition(OPEN_CLAW);
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press Play.");    //
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
+    //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
+    //Code to run ONCE when the driver hits PLAY
     @Override
     public void start() {
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
+    //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
     @Override
     public void loop() {
+
         double xSpeed;
         double ySpeed;
         double thetaRotation;
         boolean upSlider;
         boolean downSlider;
 
-        // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
+        // Run mecanum wheels in tank mode
         xSpeed = -gamepad1.left_stick_y;
         ySpeed = +gamepad1.left_stick_x;
         thetaRotation = +gamepad1.right_stick_x;
+
+        // Run slider up and down
         upSlider = gamepad2.y;
         downSlider = gamepad2.a;
 
@@ -153,20 +131,22 @@ public class RobotTeleopTank_Iterative extends OpMode{
                 slider.setPower(0);
             }
         }
-        }
 
-    /* // Use gamepad left & right Bumpers to open and close the claw
-     if (gamepad1.right_bumper)
-         clawOffset += CLAW_SPEED;
-     else if (gamepad1.left_bumper)
-         clawOffset -= CLAW_SPEED;
 
-     // Move both servos to new position.  Assume servos are mirror image of each other.
+        // Use gamepad left & right Bumpers to open and close the claw
+        if (gamepad1.right_bumper)
+            Claw.setPosition(OPEN_CLAW);
+        else if (gamepad1.left_bumper)
+            Claw.setPosition(CLOSED_CLAW);
+
+    }
+
+    /* Move both servos to new position.  Assume servos are mirror image of each other.
      clawOffset = Range.clip(clawOffset, -0.5, 0.5);
      leftClaw.setPosition(MID_SERVO + clawOffset);
      rightClaw.setPosition(MID_SERVO - clawOffset);
 
-     // Use gamepad1 buttons to move the arm up (Y) and down (A)
+     /* Use gamepad1 buttons to move the arm up (Y) and down (A)
      if (gamepad1.y)
          leftArm.setPower(ARM_UP_POWER);
      else if (gamepad1.a)
@@ -178,12 +158,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
      telemetry.addData("claw",  "Offset = %.2f", clawOffset);
      telemetry.addData("left",  "%.2f", xSpeed);
      telemetry.addData("right", "%.2f", ySpeed);
- }
+ }*/
 
-     */
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
+    // Code to run ONCE after the driver hits STOP
     @Override
     public void stop() {}
 
