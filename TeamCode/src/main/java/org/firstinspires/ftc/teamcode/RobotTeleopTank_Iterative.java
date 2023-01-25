@@ -50,8 +50,8 @@ public class RobotTeleopTank_Iterative extends OpMode{
 
     double clawOffset = 0;
 
-    public static final double OPEN_CLAW   =  0.5 ;
-    public static final double CLOSED_CLAW  = 0.8 ;        // sets rate to move servo
+    public static final double OPEN_CLAW   =  -0.3 ;
+    public static final double CLOSED_CLAW  = 0.55 ;        // sets rate to move servo
 
     public static final double SLIDER_UP_POWER    =  0.4 ;   // Run slider motor up at 40% power
     public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run slider motor down at -20% power
@@ -134,9 +134,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
 
 
         // Use gamepad left & right Bumpers to open and close the claw
-        if (gamepad1.right_bumper)
+        if (gamepad1.left_bumper)
             Claw.setPosition(OPEN_CLAW);
-        else if (gamepad1.left_bumper)
+        else if (gamepad1.right_bumper)
             Claw.setPosition(CLOSED_CLAW);
 
     }
