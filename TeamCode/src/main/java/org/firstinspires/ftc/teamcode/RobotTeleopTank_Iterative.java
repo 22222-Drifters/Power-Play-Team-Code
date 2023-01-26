@@ -50,7 +50,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
 
     double clawOffset = 0;
 
-    public static final double OPEN_CLAW   =  -0.3 ;
+    public static final double OPEN_CLAW   =  0 ;
     public static final double CLOSED_CLAW  = 0.55 ;        // sets rate to move servo
 
     public static final double SLIDER_UP_POWER    =  0.4 ;   // Run slider motor up at 40% power
