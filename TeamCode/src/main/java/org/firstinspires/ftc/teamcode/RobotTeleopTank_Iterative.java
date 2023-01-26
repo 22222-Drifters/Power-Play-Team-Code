@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -47,6 +48,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public DcMotor  backRight  = null;
     public DcMotor  slider  = null;
     public Servo    Claw    = null;
+    public ModernRoboticsTouchSensor touch = null;   // May ot be the right type of sensor
 
     double clawOffset = 0;
 
@@ -65,6 +67,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
         backLeft   = hardwareMap.get(DcMotor.class, "back_left");
         backRight  = hardwareMap.get(DcMotor.class, "back_right");
         slider  = hardwareMap.get(DcMotor.class, "slider");
+        touch = hardwareMap.get(ModernRoboticsTouchSensor.class, "touch");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left and right sticks forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -125,8 +128,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
         if (upSlider)
             slider.setPower(SLIDER_UP_POWER);
         else {
-            if (downSlider)
+            if ((downSlider) && (!touch.isPressed()))
                 slider.setPower(SLIDER_DOWN_POWER);
+
             else {
                 slider.setPower(0);
             }
