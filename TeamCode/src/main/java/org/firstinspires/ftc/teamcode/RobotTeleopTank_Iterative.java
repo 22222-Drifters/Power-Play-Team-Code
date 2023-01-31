@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsTouchSensor;
+import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -48,14 +49,16 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public DcMotor  backRight  = null;
     public DcMotor  slider  = null;
     public Servo    Claw    = null;
-    public ModernRoboticsTouchSensor touch = null;   // May ot be the right type of sensor
+    public RevTouchSensor touch = null;   // May ot be the right type of sensor
 
     double clawOffset = 0;
 
-    public static final double OPEN_CLAW   =  0 ;
-    public static final double CLOSED_CLAW  = 0.55 ;        // sets rate to move servo
+    public static final double X_FACTOR   = 0.5 ;
 
-    public static final double SLIDER_UP_POWER    =  0.4 ;   // Run slider motor up at 40% power
+    public static final double OPEN_CLAW   =  0.75 ;
+    public static final double CLOSED_CLAW  = 1 ;        // sets rate to move servo
+
+    public static final double SLIDER_UP_POWER    =  0.6 ;   // Run slider motor up at 40% power
     public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run slider motor down at -20% power
 
     //Code to run ONCE when the driver hits INIT
@@ -67,7 +70,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
         backLeft   = hardwareMap.get(DcMotor.class, "back_left");
         backRight  = hardwareMap.get(DcMotor.class, "back_right");
         slider  = hardwareMap.get(DcMotor.class, "slider");
-        touch = hardwareMap.get(ModernRoboticsTouchSensor.class, "touch");
+        touch = hardwareMap.get(RevTouchSensor.class, "touch");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left and right sticks forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -119,10 +122,10 @@ public class RobotTeleopTank_Iterative extends OpMode{
         upSlider = gamepad2.y;
         downSlider = gamepad2.a;
 
-        backLeft.setPower(xSpeed - ySpeed + thetaRotation);
-        backRight.setPower(xSpeed + ySpeed - thetaRotation);
-        frontLeft.setPower(xSpeed + ySpeed + thetaRotation);
-        frontRight.setPower(xSpeed - ySpeed - thetaRotation);
+        backLeft.setPower((xSpeed - ySpeed + thetaRotation)*X_FACTOR);
+        backRight.setPower((xSpeed + ySpeed - thetaRotation)*X_FACTOR);
+        frontLeft.setPower((xSpeed + ySpeed + thetaRotation)*X_FACTOR);
+        frontRight.setPower((xSpeed - ySpeed - thetaRotation)*X_FACTOR);
 
 
         if (upSlider)
@@ -138,9 +141,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
 
 
         // Use gamepad left & right Bumpers to open and close the claw
-        if (gamepad1.left_bumper)
+        if (gamepad2.left_bumper)
             Claw.setPosition(OPEN_CLAW);
-        else if (gamepad1.right_bumper)
+        else if (gamepad2.right_bumper)
             Claw.setPosition(CLOSED_CLAW);
 
     }
