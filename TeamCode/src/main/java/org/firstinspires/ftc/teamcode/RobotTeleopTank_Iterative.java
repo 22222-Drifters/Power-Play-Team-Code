@@ -61,6 +61,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public static final double SLIDER_UP_POWER    =  0.6 ;   // Run slider motor up at 40% power
     public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run slider motor down at -20% power
 
+
     //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
@@ -80,6 +81,10 @@ public class RobotTeleopTank_Iterative extends OpMode{
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         slider.setDirection(DcMotor.Direction.FORWARD);
+
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slider. setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
         // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -127,9 +132,13 @@ public class RobotTeleopTank_Iterative extends OpMode{
         frontLeft.setPower((xSpeed + ySpeed + thetaRotation)*X_FACTOR);
         frontRight.setPower((xSpeed - ySpeed - thetaRotation)*X_FACTOR);
 
+        telemetry. addData("current position is: ", slider. getCurrentPosition());
+        slider.setTargetPosition(2553);
 
         if (upSlider)
-            slider.setPower(SLIDER_UP_POWER);
+
+            slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         else {
             if ((downSlider) && (!touch.isPressed()))
                 slider.setPower(SLIDER_DOWN_POWER);
@@ -145,6 +154,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
             Claw.setPosition(OPEN_CLAW);
         else if (gamepad2.right_bumper)
             Claw.setPosition(CLOSED_CLAW);
+
 
     }
 
