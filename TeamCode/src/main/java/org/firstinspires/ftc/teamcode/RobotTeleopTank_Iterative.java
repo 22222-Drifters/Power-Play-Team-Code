@@ -59,7 +59,11 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public static final double CLOSED_CLAW  = 1 ;        // sets rate to move servo
 
     public static final double SLIDER_UP_POWER    =  0.6 ;   // Run slider motor up at 40% power
-    public static final double SLIDER_DOWN_POWER  = -0.2 ;   // Run slider motor down at -20% power
+    public static final double SLIDER_DOWN_POWER  = -0.5 ;   // Run slider motor down at -20% power
+
+    public static int high   = 2450 ;   // Slider
+    public static int medium  = 1700 ;
+    public static int low  = 1000 ;
 
 
     //Code to run ONCE when the driver hits INIT
@@ -115,8 +119,11 @@ public class RobotTeleopTank_Iterative extends OpMode{
         double xSpeed;
         double ySpeed;
         double thetaRotation;
-        boolean upSlider;
+        boolean lowJunction;
+        boolean mediumJunction;
+        boolean highJunction ;
         boolean downSlider;
+
 
         // Run mecanum wheels in tank mode
         xSpeed = -gamepad1.left_stick_y;
@@ -124,7 +131,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
         thetaRotation = +gamepad1.right_stick_x;
 
         // Run slider up and down
-        upSlider = gamepad2.y;
+        lowJunction  = gamepad2.x;
+        mediumJunction = gamepad2.y;
+        highJunction = gamepad2.b;
         downSlider = gamepad2.a;
 
         backLeft.setPower((xSpeed - ySpeed + thetaRotation)*X_FACTOR);
@@ -133,20 +142,36 @@ public class RobotTeleopTank_Iterative extends OpMode{
         frontRight.setPower((xSpeed - ySpeed - thetaRotation)*X_FACTOR);
 
         telemetry. addData("current position is: ", slider. getCurrentPosition());
-        slider.setTargetPosition(2553);
 
-        if (upSlider)
+ /*slider.setTargetPosition(Position);
+            slider.setPower(SLIDER_UP_POWER);
+            slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);*/
 
+        if (lowJunction) {
+            slider.setTargetPosition(low);
+            slider.setPower(SLIDER_UP_POWER);
             slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
 
-        else {
+        if (mediumJunction) {
+            slider.setTargetPosition(medium);
+            slider.setPower(SLIDER_UP_POWER);
+            slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+
+        if (highJunction) {
+            slider.setTargetPosition(high);
+        slider.setPower(SLIDER_UP_POWER);
+        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+
             if ((downSlider) && (!touch.isPressed()))
-                slider.setPower(SLIDER_DOWN_POWER);
+            { slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                slider.setPower(SLIDER_DOWN_POWER);}
 
-            else {
+            if ((!downSlider)&&(!lowJunction)&&(!mediumJunction)&&(!highJunction)){
                 slider.setPower(0);
             }
-        }
+
 
 
         // Use gamepad left & right Bumpers to open and close the claw
@@ -154,6 +179,8 @@ public class RobotTeleopTank_Iterative extends OpMode{
             Claw.setPosition(OPEN_CLAW);
         else if (gamepad2.right_bumper)
             Claw.setPosition(CLOSED_CLAW);
+
+
 
 
     }
