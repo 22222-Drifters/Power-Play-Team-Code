@@ -61,7 +61,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public static final double SLIDER_UP_POWER    =  0.6 ;   // Run slider motor up at 40% power
     public static final double SLIDER_DOWN_POWER  = -0.3 ;   // Run slider motor down at -20% power
 
-    public static int high   = 2450 ;   // Slider
+    public static int high   = 2300 ;   // Slider
     public static int medium  = 1700 ;
     public static int low  = 1000 ;
 
@@ -168,7 +168,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
             { slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 slider.setPower(SLIDER_DOWN_POWER);}
 
-            if ((!downSlider)&&(!lowJunction)&&(!mediumJunction)&&(!highJunction)||(touch.isPressed())){
+            if ((!downSlider)&&(!lowJunction)&&(!mediumJunction)&&(!highJunction)&&(touch.isPressed())){
                 slider.setPower(0);
             }
 
