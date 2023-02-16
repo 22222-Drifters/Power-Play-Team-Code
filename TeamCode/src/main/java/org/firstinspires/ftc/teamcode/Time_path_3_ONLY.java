@@ -30,12 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.nio.file.Path;
 
 /**
  * This file illustrates the concept of driving a path based on time.
@@ -56,8 +54,8 @@ import java.nio.file.Path;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-public class RobotAutoDriveByTime_Linear extends LinearOpMode {
+@Autonomous(name="Robot: 3_ONLY", group="Robot")
+public class Time_path_3_ONLY extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor frontLeft = null;
@@ -71,7 +69,7 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
 
     static final double FORWARD_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-    int Path = 1;
+    int Path = 3;
 
     @Override
     public void runOpMode() {
@@ -104,71 +102,24 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         //        frontLeft.setPower(FORWARD_SPEED + ySpeed + thetaRotation);
         //        frontRight.setPower(FORWARD_SPEED - ySpeed - thetaRotation);
         // path 1
-        if (Path == 1) {
-            backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(-FORWARD_SPEED);
-            frontLeft.setPower(-FORWARD_SPEED);
-            frontRight.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0))
-                backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(FORWARD_SPEED);
-            frontLeft.setPower(FORWARD_SPEED);
-            frontRight.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.8))
 
 
-                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
-            sleep(1000);
-        }
         // path 2
-        if (Path == 2)
-        {
-            backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(FORWARD_SPEED);
-            frontLeft.setPower(FORWARD_SPEED);
-            frontRight.setPower(FORWARD_SPEED);
 
-
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.8))
-
-
-                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
-            sleep(1000);
-        }
         // path 3
 
-        if (Path == 3)
-        {
-            backLeft.setPower(-FORWARD_SPEED);
+
+        backLeft.setDirection(DcMotor.Direction.FORWARD);   // Change direction to make wheel go back words
+            backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(-FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0))
+        while (opModeIsActive() && (runtime.seconds() < 1.7))
 
-            backLeft.setPower(FORWARD_SPEED);
+            backLeft.setDirection(DcMotor.Direction.REVERSE);  // changed direction back to original
+        backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(FORWARD_SPEED);
@@ -190,12 +141,15 @@ public class RobotAutoDriveByTime_Linear extends LinearOpMode {
         telemetry.update();
         sleep(1000);
 
-    }
+
 
         }
 
         // step 4:  Stop
 
     }
+
+
+
 
 
