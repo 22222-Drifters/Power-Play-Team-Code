@@ -64,6 +64,7 @@ public class RobotTeleopTank_Iterative extends OpMode{
     public static int high   = 2300 ;   // Slider
     public static int medium  = 1700 ;
     public static int low  = 1000 ;
+    public static int down = 0 ;
 
 
     //Code to run ONCE when the driver hits INIT
@@ -165,8 +166,9 @@ public class RobotTeleopTank_Iterative extends OpMode{
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
 
             if ((downSlider) && (!touch.isPressed()))
-            { slider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                slider.setPower(SLIDER_DOWN_POWER);}
+            { slider.setTargetPosition(down);
+                slider.setPower(SLIDER_DOWN_POWER);
+                slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
 
             if ((!downSlider)&&(!lowJunction)&&(!mediumJunction)&&(!highJunction)&&(touch.isPressed())){
                 slider.setPower(0);

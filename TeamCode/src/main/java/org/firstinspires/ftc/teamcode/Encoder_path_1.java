@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -53,8 +54,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: 2", group="Robot")
-public class Time_path_2 extends LinearOpMode {
+@Autonomous(name="Robot: En1", group="Robot")
+public class Encoder_path_1 extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor frontLeft = null;
@@ -68,14 +69,13 @@ public class Time_path_2 extends LinearOpMode {
 
     static final double FORWARD_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-    int Path;
-    static final double FDISTANCE = 4000;
+    public static int FDISTANCE = 3000;
+    public static int SDISTANCE = 1600;
+    public static int BDISTANCE = -1600;
+public static int path;
     boolean p1;
     boolean p2;
     boolean p3;
-
-
-
     @Override
     public void runOpMode() {
 
@@ -93,26 +93,39 @@ public class Time_path_2 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
         telemetry. addData("FL current position is: ", frontLeft. getCurrentPosition());
-        telemetry. addData("FR current position is: ", frontRight. getCurrentPosition());
+        /*telemetry. addData("FR current position is: ", frontRight. getCurrentPosition());
         telemetry. addData("BL current position is: ", backLeft. getCurrentPosition());
-        telemetry. addData("BR current position is: ", backRight. getCurrentPosition());
+        telemetry. addData("BR current position is: ", backRight. getCurrentPosition());*/
         telemetry.update();
         p1  = gamepad2.x;
         p2 = gamepad2.y;
         p3 = gamepad2.b;
 
         if (p1)
-            Path = 1;
+            path = 1;
 
         if (p2)
-            Path = 2;
+            path = 2;
 
         if (p3)
-            Path = 3;
-        // Wait for the game to start (driver presses PLAY)
+            path = 3;
+
+    // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
@@ -122,19 +135,47 @@ public class Time_path_2 extends LinearOpMode {
         //        frontLeft.setPower(FORWARD_SPEED + ySpeed + thetaRotation);
         //        frontRight.setPower(FORWARD_SPEED - ySpeed - thetaRotation);
         // path 1
-        if (Path == 1) {
+        if (path == 1) {
+            backLeft.setTargetPosition(SDISTANCE);
+            backRight.setTargetPosition(BDISTANCE);
+            frontLeft.setTargetPosition(BDISTANCE);
+            frontRight.setTargetPosition(SDISTANCE);
+
             backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(-FORWARD_SPEED);
-            frontLeft.setPower(-FORWARD_SPEED);
+            backRight.setPower(FORWARD_SPEED);
+            frontLeft.setPower(FORWARD_SPEED);
             frontRight.setPower(FORWARD_SPEED);
+
+
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.0))
+            while (opModeIsActive() && backLeft.getCurrentPosition() < 1400)
+
+                frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                backLeft.setTargetPosition(FDISTANCE);
+            backRight.setTargetPosition(FDISTANCE);
+            frontLeft.setTargetPosition(FDISTANCE);
+            frontRight.setTargetPosition(FDISTANCE);
+
                 backLeft.setPower(FORWARD_SPEED);
             backRight.setPower(FORWARD_SPEED);
             frontLeft.setPower(FORWARD_SPEED);
             frontRight.setPower(FORWARD_SPEED);
+
+
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 10))
+            while (opModeIsActive() && (backLeft.getCurrentPosition() < 3000))
 
 
                 telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
@@ -152,9 +193,12 @@ public class Time_path_2 extends LinearOpMode {
 
         // path 2
 
-        if (Path == 2)
+        if (path == 2)
         {
-
+            backLeft.setTargetPosition(FDISTANCE);
+            backRight.setTargetPosition(FDISTANCE);
+            frontLeft.setTargetPosition(FDISTANCE);
+            frontRight.setTargetPosition(FDISTANCE);
 
             backLeft.setPower(FORWARD_SPEED);
             backRight.setPower(FORWARD_SPEED);
@@ -168,14 +212,9 @@ public class Time_path_2 extends LinearOpMode {
 
 
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 1.8))
+            while (opModeIsActive() && (runtime.seconds() < 5))
 
-
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry. addData("FL current position is: ", frontLeft. getCurrentPosition());
-            telemetry. addData("FR current position is: ", frontRight. getCurrentPosition());
-            telemetry. addData("BL current position is: ", backLeft. getCurrentPosition());
-            telemetry. addData("BR current position is: ", backRight. getCurrentPosition());
 
             telemetry.update();
 
@@ -190,16 +229,38 @@ public class Time_path_2 extends LinearOpMode {
         }
         // path 3
 
-        if (Path == 3)
+        if (path == 3)
         {
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
+            backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            backLeft.setTargetPosition(BDISTANCE);
+            backRight.setTargetPosition(SDISTANCE);
+            frontLeft.setTargetPosition(SDISTANCE);
+            frontRight.setTargetPosition(BDISTANCE);
+
+
             backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
-        frontRight.setPower(-FORWARD_SPEED);
+        frontRight.setPower(FORWARD_SPEED);
+
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.6))
+        while (opModeIsActive() && backRight.getCurrentPosition() < 1400)
+
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            backLeft.setTargetPosition(FDISTANCE);
+            backRight.setTargetPosition(FDISTANCE);
+            frontLeft.setTargetPosition(FDISTANCE);
+            frontRight.setTargetPosition(FDISTANCE);
 
             backLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setPower(FORWARD_SPEED);
@@ -207,9 +268,14 @@ public class Time_path_2 extends LinearOpMode {
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(FORWARD_SPEED);
 
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.8))
-            
+        while (opModeIsActive() && (backRight.getCurrentPosition() < 3000))
+
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
         telemetry.update();
 
