@@ -249,7 +249,7 @@ public static int path;
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
-        while (opModeIsActive() && backRight.getCurrentPosition() < 1400)
+        while (opModeIsActive() && backRight.getCurrentPosition() < 1400) {
 
             frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -264,6 +264,7 @@ public static int path;
 
             backLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setPower(FORWARD_SPEED);
+        }
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(FORWARD_SPEED);
