@@ -35,6 +35,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
 /**
  * This file illustrates the concept of driving a path based on time.
  * The code is structured as a LinearOpMode
@@ -63,6 +68,13 @@ public class Encoder_path_1 extends LinearOpMode {
     public DcMotor backLeft = null;
     public DcMotor backRight = null;
 
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    double fx = 578.272; //нужно откалибровать для своей камеры
+    double fy = 578.272; //нужно откалибровать для своей камеры
+    double cx = 402.145; //нужно откалибровать для своей камеры
+    double cy = 221.506; //нужно откалибровать для своей камеры
+    double tagSize = 0.166;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -72,12 +84,28 @@ public class Encoder_path_1 extends LinearOpMode {
     public static int FDISTANCE = 3000;
     public static int SDISTANCE = 1600;
     public static int BDISTANCE = -1600;
-public static int path;
-    boolean p1;
-    boolean p2;
-    boolean p3;
+    public static int path;
+
     @Override
     public void runOpMode() {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagSize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
 
         // Initialize the drive system variables.
         frontLeft = hardwareMap.get(DcMotor.class, "front_left");
@@ -112,21 +140,30 @@ public static int path;
         telemetry. addData("BL current position is: ", backLeft. getCurrentPosition());
         telemetry. addData("BR current position is: ", backRight. getCurrentPosition());*/
         telemetry.update();
-        p1  = gamepad2.x;
-        p2 = gamepad2.y;
-        p3 = gamepad2.b;
 
-        if (p1)
-            path = 1;
 
-        if (p2)
-            path = 2;
 
-        if (p3)
-            path = 3;
+
 
     // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        if (aprilTagDetectionPipeline.getLatestDetections().size() != 0)
+        {
+            int id = aprilTagDetectionPipeline.getLatestDetections().get(0).id;
+
+            if (id == 6)
+                path = 1;
+
+            if (id == 9)
+                path = 2;
+
+            if (id == 12)
+                path = 3;
+
+            telemetry.addData("AprilTag ID", id);
+            telemetry.update();
+            sleep(1000);
+        }
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
