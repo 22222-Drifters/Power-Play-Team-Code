@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -59,8 +58,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: En1", group="Robot")
-public class Encoder_path_1 extends LinearOpMode {
+@Autonomous(name="Robot: En11", group="Robot")
+public class Encoder_path_1_1 extends LinearOpMode {
 
     /* Declare OpMode members. */
     public DcMotor frontLeft = null;
@@ -136,9 +135,7 @@ public class Encoder_path_1 extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");
         telemetry. addData("FL current position is: ", backLeft. getCurrentPosition());
-        /*telemetry. addData("FR current position is: ", frontRight. getCurrentPosition());
-        telemetry. addData("BL current position is: ", backLeft. getCurrentPosition());
-        telemetry. addData("BR current position is: ", backRight. getCurrentPosition());*/
+
         telemetry.update();
 
 
@@ -165,97 +162,55 @@ public class Encoder_path_1 extends LinearOpMode {
             sleep(1000);
         }
 
-        // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // backLeft.setPower(FORWARD_SPEED - ySpeed + thetaRotation);
-        //        backRight.setPower(FORWARD_SPEED + ySpeed - thetaRotation);
-        //        frontLeft.setPower(FORWARD_SPEED + ySpeed + thetaRotation);
-        //        frontRight.setPower(FORWARD_SPEED - ySpeed - thetaRotation);
+
         // path 1
         if (path == 1) {
 
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
-
-            backLeft.setTargetPosition(SDISTANCE);
-            backRight.setTargetPosition(BDISTANCE);
-            frontLeft.setTargetPosition(BDISTANCE);
-            frontRight.setTargetPosition(SDISTANCE);
-
-            backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(FORWARD_SPEED);
-            frontLeft.setPower(FORWARD_SPEED);
-            frontRight.setPower(FORWARD_SPEED);
-
-
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
-            while (opModeIsActive() && backLeft.getCurrentPosition() < 1400)
-
-                frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                backLeft.setTargetPosition(FDISTANCE);
-            backRight.setTargetPosition(FDISTANCE);
-            frontLeft.setTargetPosition(FDISTANCE);
-            frontRight.setTargetPosition(FDISTANCE);
-
                 backLeft.setPower(FORWARD_SPEED);
-            backRight.setPower(FORWARD_SPEED);
-            frontLeft.setPower(FORWARD_SPEED);
-            frontRight.setPower(FORWARD_SPEED);
+                backRight.setPower(-FORWARD_SPEED);
+                frontLeft.setPower(-FORWARD_SPEED);
+                frontRight.setPower(FORWARD_SPEED);
+                runtime.reset();
+                while (opModeIsActive() && (backLeft.getCurrentPosition() < 1400))
+                    backLeft.setPower(FORWARD_SPEED);
+                backRight.setPower(FORWARD_SPEED);
+                frontLeft.setPower(FORWARD_SPEED);
+                frontRight.setPower(FORWARD_SPEED);
+                runtime.reset();
+                while (opModeIsActive() && (backLeft.getCurrentPosition() < 3000))
 
 
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
-            while (opModeIsActive() && (backLeft.getCurrentPosition() < 3000))
+                    telemetry.addData("Path", "Leg 1: ranwithencoders", runtime.seconds());
 
+                telemetry.update();
 
-                telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
+                backLeft.setPower(0);
+                backRight.setPower(0);
+                frontLeft.setPower(0);
+                frontRight.setPower(0);
 
-            backLeft.setPower(0);
-            backRight.setPower(0);
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
-            sleep(1000);
-        }
+                telemetry.addData("Path", "Complete");
+                telemetry.update();
+                sleep(1000);
+            }
 
         // path 2
 
         if (path == 2)
         {
-            backLeft.setTargetPosition(FDISTANCE);
-            backRight.setTargetPosition(FDISTANCE);
-            frontLeft.setTargetPosition(FDISTANCE);
-            frontRight.setTargetPosition(FDISTANCE);
 
             backLeft.setPower(FORWARD_SPEED);
             backRight.setPower(FORWARD_SPEED);
             frontLeft.setPower(FORWARD_SPEED);
             frontRight.setPower(FORWARD_SPEED);
 
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
             runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 5))
+            while (opModeIsActive() && (backLeft.getCurrentPosition() < 1500))
 
-            telemetry. addData("FL current position is: ", frontLeft. getCurrentPosition());
 
+                telemetry.addData("Path", "Leg 1: ranwithencoders", runtime.seconds());
             telemetry.update();
 
             backLeft.setPower(0);
@@ -270,53 +225,27 @@ public class Encoder_path_1 extends LinearOpMode {
         // path 3
 
         if (path == 3)
+        {
 
-            backLeft.setTargetPosition(BDISTANCE);
-            backRight.setTargetPosition(SDISTANCE);
-            frontLeft.setTargetPosition(SDISTANCE);
-            frontRight.setTargetPosition(BDISTANCE);
-
-
-            backLeft.setPower(FORWARD_SPEED);
+            backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
-        frontRight.setPower(FORWARD_SPEED);
-
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setPower(-FORWARD_SPEED);
 
         runtime.reset();
-        while (opModeIsActive() && backRight.getCurrentPosition() < 1400) {
-
-            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-            backLeft.setTargetPosition(FDISTANCE);
-            backRight.setTargetPosition(FDISTANCE);
-            frontLeft.setTargetPosition(FDISTANCE);
-            frontRight.setTargetPosition(FDISTANCE);
+        while (opModeIsActive() && (backRight.getCurrentPosition() < 1400))
 
             backLeft.setDirection(DcMotor.Direction.REVERSE);
-            backLeft.setPower(FORWARD_SPEED);
-        }
+        backLeft.setPower(FORWARD_SPEED);
         backRight.setPower(FORWARD_SPEED);
         frontLeft.setPower(FORWARD_SPEED);
         frontRight.setPower(FORWARD_SPEED);
-
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
         while (opModeIsActive() && (backRight.getCurrentPosition() < 3000))
 
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            telemetry.addData("Path", "Leg 1: ranwithencoders", runtime.seconds());
         telemetry.update();
 
         backLeft.setPower(0);
@@ -331,6 +260,7 @@ public class Encoder_path_1 extends LinearOpMode {
     }
 
         }
+}
 
         // step 4:  Stop
 
