@@ -39,26 +39,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-/**
- * This file illustrates the concept of driving a path based on time.
- * The code is structured as a LinearOpMode
- *
- * The code assumes that you do NOT have encoders on the wheels,
- *   otherwise you would use: RobotAutoDriveByEncoder;
- *
- *   The desired path in this example is:
- *   - Drive forward for 3 seconds
- *   - Spin right for 1.3 seconds
- *   - Drive Backward for 1 Second
- *
- *  The code is written in a simple form with no optimizations.
- *  However, there are several ways that this type of sequence could be streamlined,
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
-@Autonomous(name="Robot: En11", group="Robot")
+@Autonomous(name="AT: Parking with Enc", group="Robot")
 public class Encoder_path_1_1 extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -69,20 +50,19 @@ public class Encoder_path_1_1 extends LinearOpMode {
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-    double fx = 578.272; //нужно откалибровать для своей камеры
-    double fy = 578.272; //нужно откалибровать для своей камеры
-    double cx = 402.145; //нужно откалибровать для своей камеры
-    double cy = 221.506; //нужно откалибровать для своей камеры
+    double fx = 578.272; //calibrate for your camera
+    double fy = 578.272; //calibrate for your camera
+    double cx = 402.145; //calibrate for your camera
+    double cy = 221.506; //calibrate for your camera
     double tagSize = 0.166;
 
     private ElapsedTime runtime = new ElapsedTime();
 
-
     static final double FORWARD_SPEED = 0.6;
-    static final double TURN_SPEED = 0.5;
-    public static int FDISTANCE = 3000;
-    public static int SDISTANCE = 1600;
-    public static int BDISTANCE = -1600;
+    //static final double TURN_SPEED = 0.5;
+    //public static int FDISTANCE = 3000;
+    //public static int SDISTANCE = 1600;
+    //public static int BDISTANCE = -1600;
     public static int path;
 
     @Override
@@ -130,17 +110,11 @@ public class Encoder_path_1_1 extends LinearOpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");
+        //telemetry.addData("Status", "Ready to run");
         telemetry. addData("FL current position is: ", backLeft. getCurrentPosition());
 
         telemetry.update();
-
-
-
-
 
     // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -180,9 +154,7 @@ public class Encoder_path_1_1 extends LinearOpMode {
                 runtime.reset();
                 while (opModeIsActive() && (backLeft.getCurrentPosition() < 3000))
 
-
-                    telemetry.addData("Path", "Leg 1: ranwithencoders", runtime.seconds());
-
+                telemetry.addData("Path", "Leg 1: ranwithencoders", runtime.seconds());
                 telemetry.update();
 
                 backLeft.setPower(0);
